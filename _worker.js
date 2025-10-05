@@ -1,4 +1,4 @@
-﻿
+
 import { connect } from 'cloudflare:sockets';
 
 let userID = '';
@@ -1279,7 +1279,7 @@ async function handleUDPOutBound(webSocket, 维列斯ResponseHeader, log) {
     // only handle dns udp for now
     transformStream.readable.pipeTo(new WritableStream({
         async write(chunk) {
-            const resp = await fetch('https://1.1.1.1/dns-query',
+            const resp = await fetch('https://dns.google/dns-query',
                 {
                     method: 'POST',
                     headers: {
@@ -1345,7 +1345,7 @@ async function handleDNSQuery(udpChunk, webSocket, 维列斯ResponseHeader, log)
     // 因为有些 DNS 服务器不支持 DNS over TCP
     try {
         // 选用 Google 的 DNS 服务器（注：后续可能会改为 Cloudflare 的 1.1.1.1）
-        const dnsServer = '8.8.4.4'; // 在 Cloudflare 修复连接自身 IP 的 bug 后，将改为 1.1.1.1
+        const dnsServer = '8.8.8.8'; // 在 Cloudflare 修复连接自身 IP 的 bug 后，将改为 1.1.1.1
         const dnsPort = 53; // DNS 服务的标准端口
 
         let 维列斯Header = 维列斯ResponseHeader; // 保存 维列斯 响应头部，用于后续发送
@@ -3010,7 +3010,7 @@ async function resolveToIPv6(target) {
 
     // 获取域名的IPv4地址
     async function fetchIPv4(domain) {
-        const url = `https://1.1.1.1/dns-query?name=${domain}&type=A`;
+        const url = `https://8.8.8.8/dns-query?name=${domain}&type=A`;
         const response = await fetch(url, {
             headers: { 'Accept': 'application/dns-json' }
         });
